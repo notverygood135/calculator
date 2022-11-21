@@ -3,7 +3,6 @@ import Display from './Display';
 import Keypad from './Keypad';
 import './App.css';
 
-// const operatorList = ["+", "-", "*", "/"];
 const operatorList = {
   plus : function(num1, num2) {
     return num1 + num2;
@@ -15,13 +14,12 @@ const operatorList = {
     return num1 * num2;
   },  
   divide : function(num1, num2) {
-    return num1 / num2;
+    return num2 === 0 ? "dũng non như chó" : num1 / num2;
   }
 };
 
 let result;
 let operator;
-// let nextInput = false;
 
 function App() {
   const [input, setInput] = useState("");
@@ -30,38 +28,43 @@ function App() {
   function handleInput(val) {
     if (val === "C") {
       setInput("");
-      // nextInput = false;
       setNextInput(false);
       result = null;
     }
-    else if ((0 <= val && val <= 9) || val === ".") {
-      console.log(input);
+    else if ((0 <= val && val <= 9)) {
       setInput(prevState => nextInput ? `${val}` : prevState + val);
       setNextInput(false);
+    }
+    else if (val === ".") {
+      if (input.includes(".")) {
+        return;
+      }
+      setInput(prevState => nextInput ? `${val}` : prevState + val);
     }
   }
 
   function handleOperator(op) {
-    // let promise = new Promise(() => {
-    //   console.log(input);
-    //   setResult(prevResult => prevResult ? operator(prevResult, parseInt(input)) : parseInt(input));
-    // })
-    // promise.then(console.log(result));
-    result = result ? operator(result, parseInt(input)) : parseInt(input);
-    if (result) {
-      console.log(input);
+    console.log(`before: ${result}`);
+    console.log(`input: ${input}`);
+    result = typeof result == "number" ? operator(result, parseFloat(input)) : parseFloat(input);
+    if (typeof result == "number") {
       operator = operatorList[op];
-      setNextInput(true);
-      // nextInput = true;
-      console.log(nextInput);
-      console.log(operator);
-      console.log(result);
+      setNextInput(true); //inputting will create a new string if an operator was chosen
       setInput(result.toString());
     }
+    console.log(`after: ${result}`);
   }
 
-  function handleEqual() {
-    result = result ? operator(result, parseInt(input)) : parseInt(input);
+  function percent() {
+    if(input) setInput(prevInput => prevInput/100);
+  }
+
+  function reverse() {
+    if(input) setInput(prevInput => -prevInput);
+  }
+
+  function equal() {
+    result = typeof result == "number" ? operator(result, parseFloat(input)) : parseFloat(input);
     setInput(result.toString());
   }
 
@@ -69,7 +72,13 @@ function App() {
     <div className="App">
       <div className="wrapper">
         <Display input={input}/>
-        <Keypad handleInput={handleInput} handleOperator={handleOperator} handleEqual={handleEqual}/>
+        <Keypad 
+          handleInput={handleInput} 
+          handleOperator={handleOperator} 
+          equal={equal}
+          percent={percent}
+          reverse={reverse}
+        />
       </div>
     </div>
   );
