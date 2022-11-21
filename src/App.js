@@ -44,15 +44,12 @@ function App() {
   }
 
   function handleOperator(op) {
-    console.log(`before: ${result}`);
-    console.log(`input: ${input}`);
     result = typeof result == "number" ? operator(result, parseFloat(input)) : parseFloat(input);
     if (typeof result == "number") {
       operator = operatorList[op];
       setNextInput(true); //inputting will create a new string if an operator was chosen
       setInput(result.toString());
     }
-    console.log(`after: ${result}`);
   }
 
   function percent() {
