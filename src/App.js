@@ -4,16 +4,16 @@ import Keypad from './Keypad';
 import './App.css';
 
 const operatorList = {
-  plus : function(num1, num2) {
+  plus(num1, num2) {
     return num1 + num2;
   }, 
-  minus : function(num1, num2) {
+  minus(num1, num2) {
     return num1 - num2;
   },  
-  multiply : function(num1, num2) {
+  multiply(num1, num2) {
     return num1 * num2;
   },  
-  divide : function(num1, num2) {
+  divide(num1, num2) {
     return num2 === 0 ? "dũng non như chó" : num1 / num2;
   }
 };
